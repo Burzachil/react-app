@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from './components/button/button'
 let styles = {
     textAlign: 'center',
     paddingTop: '20px',
@@ -29,7 +30,7 @@ class App extends React.Component {
                 <div id={id} style={styles}>
                     {this.state.counter}
                 </div>
-                <button onClick={this.click}>{this.state.a.b} {this.state.counter}</button>
+                <Button onClick={this.click}>{this.state.a.b} {this.state.counter}</Button>
             </div>
         );
     }
