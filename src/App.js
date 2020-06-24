@@ -1,36 +1,78 @@
 import React from 'react';
-import Button from './components/button/button'
-let styles = {
-    textAlign: 'center',
-    paddingTop: '20px',
-    color: 'red'
-}
-const id = 'myId'
 
+class ShowClock extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        }
+    }
+
+    render() {
+        return (
+            <button onClick={this.props.onClick}>Показать/скрыть секундомер</button>
+        );
+    }
+}
+
+class StartClock extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            startTime: 0
+        }
+    }
+
+    render() {
+        return (
+            <button onClick={this.props.onClick}>Запустить/остановить секундомер</button>
+        );
+    }
+}
 
 class App extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            counter: 1,
-            a: {
-                b: 'My button'
-            }
+            showClock: true,
+            clockStart: false,
+            time: 0,
+            clockHistory: []
         }
     }
-    click = () => {
+
+    clickShow = () => {
         this.setState({
-            counter: this.state.counter + 1
+            showClock: !this.state.showClock
         })
     }
+
+    clickStart = () => {
+        console.log(this.state.clockStart)
+        if (!this.state.clockStart) {
+            this.setState({
+                timerRef: setInterval(() => this.setState({time: this.state.time + 1}), 100),
+                clockStart: true
+            })
+        } else {
+            console.log(this.state.time)
+            clearInterval(this.state.timerRef)
+            this.setState({
+                clockHistory: this.state.clockHistory.concat(this.state.time),
+                time: 0,
+                clockStart: false
+            })
+            console.log(this.state.clockHistory)
+        }
+
+    }
+
     render() {
         return (
             <div>
-                <div id={id} style={styles}>
-                    {this.state.counter}
-                </div>
-                <Button onClick={this.click}>{this.state.a.b} {this.state.counter}</Button>
+                <div>{this.state.showClock && this.state.time}</div>
+                <ShowClock onClick={this.clickShow}/>
+                <StartClock onClick={this.clickStart}/>
+                {this.clockHistory}
             </div>
         );
     }
