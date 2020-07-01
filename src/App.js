@@ -1,82 +1,48 @@
 import React from 'react';
 
-class ShowClock extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        }
-    }
-
-    render() {
-        return (
-            <button onClick={this.props.onClick}>Показать/скрыть секундомер</button>
-        );
-    }
-}
-
-class StartClock extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            startTime: 0
-        }
-    }
-
-    render() {
-        return (
-            <button onClick={this.props.onClick}>Запустить/остановить секундомер</button>
-        );
-    }
-}
-
 class App extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
-            showClock: true,
-            clockStart: false,
-            time: 0,
-            clockHistory: []
-        }
+            isToggleOn: false,
+            styleDiv: {
+                width: "95vw",
+                height: "95vh"
+            },
+            styleBtn: {
+                backgroundColor: "red",
+                width: "200px",
+                height: "200px"
+            }
+        };
     }
 
-    clickShow = () => {
-        this.setState({
-            showClock: !this.state.showClock
-        })
+    handleClick = (e) => {
+        this.setState(state => ({
+            isToggleOn: !state.isToggleOn
+        }));
     }
 
-    clickStart = () => {
-        console.log(this.state.clockStart)
-        if (!this.state.clockStart) {
-            this.setState({
-                timerRef: setInterval(() => this.setState({time: this.state.time + 1}), 100),
-                clockStart: true
-            })
-        } else {
-            console.log(this.state.time)
-            clearInterval(this.state.timerRef)
-            this.setState({
-                clockHistory: this.state.clockHistory.concat(this.state.time),
-                time: 0,
-                clockStart: false
-            })
-            console.log(this.state.clockHistory)
+    move = (e) => {
+        if (this.state.isToggleOn) {
+            this.setState({styleBtn: {position: "absolute",top: e.clientY - 100, left: e.clientX - 100, backgroundColor: "red",
+                    width: "200px",
+                    height: "200px"}})
         }
-
     }
 
     render() {
         return (
-            <div>
-                <div>{this.state.showClock && this.state.time}</div>
-                <ShowClock onClick={this.clickShow}/>
-                <StartClock onClick={this.clickStart}/>
-                {this.clockHistory}
+            <div onMouseMove={this.move} style={this.state.styleDiv}>
+                <div onClick={this.handleClick}  style={this.state.styleBtn}>
+                    {this.state.isToggleOn ? 'Включено' : 'Выключено'}
+                </div>
             </div>
         );
     }
 }
+
 
 App.propTypes = {};
 
